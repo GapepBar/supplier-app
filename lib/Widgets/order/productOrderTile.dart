@@ -140,37 +140,37 @@ class _ProductOrderTileState extends ConsumerState<ProductOrderTile> {
               ],
             ),
           )
-        : Container(
-            alignment: Alignment(0, 0),
-            width: scWidth * 0.48 * 0.36,
-            height: scWidth * 0.48 * 0.20,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(),
-              color: Colors.white,
+        : GestureDetector(
+            onTap: () async {
+              Map<String, double>? inputmp =
+                  await showDialog<Map<String, double>>(
+                context: context,
+                builder: (context) =>
+                    _displayDialogBox(context, mp['product']['quantityType']),
+              );
+              print('Dialog one returned value ---> $inputmp');
+
+              setState(() {
+                counter = inputmp!['qtyVal'] ?? 0.0;
+              });
+
+              if (inputmp!['qtyVal'] != 0.0) {
+                final cartViewModel = ref.read(orderCartItemsProvider.notifier);
+                cartViewModel.addCartItems(mp['product']['productId'],
+                    inputmp['qtyVal'] ?? 0, inputmp['price'] ?? 0);
+              }
+            },
+            child: Container(
+              alignment: Alignment(0, 0),
+              width: scWidth * 0.48 * 0.36,
+              height: scWidth * 0.48 * 0.20,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(),
+                color: Colors.white,
+              ),
+              child: const Text('ADD'),
             ),
-            child: GestureDetector(
-                onTap: () async {
-                  Map<String, double>? inputmp =
-                      await showDialog<Map<String, double>>(
-                    context: context,
-                    builder: (context) => _displayDialogBox(
-                        context, mp['product']['quantityType']),
-                  );
-                  print('Dialog one returned value ---> $inputmp');
-
-                  setState(() {
-                    counter = inputmp!['qtyVal'] ?? 0.0;
-                  });
-
-                  if (inputmp!['qtyVal'] != 0.0) {
-                    final cartViewModel =
-                        ref.read(orderCartItemsProvider.notifier);
-                    cartViewModel.addCartItems(mp['product']['productId'],
-                        inputmp['qtyVal'] ?? 0, inputmp['price'] ?? 0);
-                  }
-                },
-                child: const Text('ADD')),
           );
   }
 

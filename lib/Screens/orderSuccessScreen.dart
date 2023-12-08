@@ -17,6 +17,7 @@ class OrderSuccessScreen extends ConsumerWidget {
 
     return WillPopScope(
       onWillPop: () async {
+        ref.invalidate(fetchOrdersProvider);
         Navigator.of(context).pushNamedAndRemoveUntil(
             '/homepage', (Route<dynamic> route) => false);
         return false;
